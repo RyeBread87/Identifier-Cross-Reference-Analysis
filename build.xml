@@ -1,0 +1,73 @@
+<!-- This buildfile is for cs536 (spring 2015) project #1 (debugging infomation enabled in javac)
+ -->
+
+	<project default="compile">
+
+ <target name ="compile" depends="JLex,Cup,AST">
+   <mkdir dir="bin">
+   </mkdir>
+   <javac  includeantruntime="false" srcdir="src" destdir="bin"
+            classpath="." excludes="*.jlex.java,ast.java" debug="on">
+   </javac>
+ </target>
+
+ <target name ="clean">
+   <delete dir="bin">
+   </delete>
+ </target>
+
+ <target name ="test" depends="compile">
+ 	<echo message="------- test using test.lite ----------">
+ 	     </echo>
+   <java classpath="bin;." classname="P1" fork="true" >
+    <arg value="test.lite">
+    </arg>
+   </java>
+ 	<echo message="------- test using biggertest.lite ----------">
+ 	 	     </echo>
+ 	   <java classpath="bin;." classname="P1" fork="true" >
+ 	    <arg value="biggertest.lite">
+ 	    </arg>
+ 	   </java>
+ </target>
+
+ 
+
+ <target name ="JLex">
+   <mkdir dir="bin">
+   </mkdir>
+  
+    <javac  includeantruntime="false" srcdir="src" destdir="bin"
+            classpath="."  includes="lite.jlex.java" debug="on">
+     </javac>
+ </target>
+
+		
+ <target name ="Cup">
+ 	
+   <mkdir dir="bin">
+   </mkdir>
+  
+   <javac  includeantruntime="false" srcdir="src" destdir="bin"
+            classpath="."  includes="sym.java" debug="on">
+    </javac>
+ </target>
+
+
+ <target name ="checkASTNeeded" >
+   <uptodate property="ASTnotNeeded" targetfile="bin/nullTypeNode.class" 
+      srcfile= "src/ast.java" >
+   </uptodate>
+ </target>
+
+ <target name ="AST" depends="checkASTNeeded" unless="ASTnotNeeded">
+   <mkdir dir="bin">
+   </mkdir>
+    <javac  includeantruntime="false" srcdir="src" destdir="bin"
+            classpath="."  includes="ast.java" debug="on" >
+     </javac>
+ </target>
+
+
+
+</project>

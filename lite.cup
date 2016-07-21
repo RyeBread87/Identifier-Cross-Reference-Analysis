@@ -1,0 +1,134 @@
+/***
+ *
+ * This Is A Java CUP Specification For CSX-lite, a Small Subset
+ * of The CSX Language,  Used In Cs536
+ *
+ ***/
+
+/* Preliminaries to set up and use the scanner.  */
+
+import java_cup.runtime.*;
+parser code {:
+ public void syntax_error(Symbol cur_token)
+     {
+ 	  report_error("CSX syntax error at line "+
+			String.valueOf(((CSXToken)cur_token.value).linenum),  
+			null);
+     }
+:};
+init with {:              :};
+scan with {: return Scanner.next_token(); :};
+
+/* Terminals (tokens returned by the scanner). */
+terminal CSXIdentifierToken     IDENTIFIER; 
+terminal CSXIntLitToken			INTLIT;
+terminal CSXToken     			SEMI, LPAREN, RPAREN, ASG, LBRACE, RBRACE;
+terminal CSXToken     			PLUS, MINUS, EQ, NOTEQ, rw_IF;
+terminal CSXToken     			rw_INT, rw_BOOL;
+
+/* Non terminals */
+non terminal csxLiteNode     	prog;  
+non terminal stmtsOption     	stmts;  
+non terminal stmtNode	     	stmt;
+non terminal exprNode			exp;
+non terminal exprNode			unit; 
+non terminal identNode	     	ident;
+non terminal fieldDeclsOption	fielddecls; 
+non terminal declNode			fielddecl;
+non terminal typeNode			type;
+non terminal Symbol		     	optionalSemi;
+non terminal intLitNode		    intliteral;
+
+
+
+
+start with prog;
+
+prog		::= LBRACE:l fielddecls:f stmts:s RBRACE
+			 {: RESULT=
+				new csxLiteNode(f, s, l.linenum, l.colnum); :}	
+		;
+		
+fielddecls
+   			 ::=   fielddecl:f1 fielddecls:f2 
+				 {: RESULT=
+					new fieldDeclsNode(f1,f2, f1.linenum,f1.colnum); :}	
+   			 |
+				 {: RESULT=
+					fieldDeclsNode.NULL; :}	
+    		;
+fielddecl
+   			 ::= type:t     ident:i      SEMI 
+				 {: RESULT=
+					new varDeclNode(i,t,exprNode.NULL, t.linenum,t.colnum); :}	
+    		;
+    		
+type
+   			 ::= rw_INT:t
+	 			{:
+	  				 RESULT=new intTypeNode(t.linenum, t.colnum);
+         		:}	
+    		 |   rw_BOOL:t
+				 {:
+	  				 RESULT=new boolTypeNode(t.linenum, t.colnum);
+         		:}	
+    		; 
+    		
+stmts		::= stmt:s1  stmts:s2
+			 {: RESULT=
+			new stmtsNode(s1,s2,s1.linenum,s1.colnum);
+			 :}	
+		| 
+			 {: RESULT= stmtsNode.NULL; :} 
+		;
+stmt		::= ident:id ASG exp:e SEMI
+			 {: RESULT=
+			new asgNode(id,e,id.linenum,id.colnum);
+			 :}	
+
+		| rw_IF:i LPAREN exp:e RPAREN  stmt:s
+			 {:
+			 RESULT=new ifThenNode(e,s,stmtNode.NULL,
+						i.linenum,i.colnum); :}	
+						
+		|   LBRACE:l fielddecls:f stmts:s RBRACE optionalSemi
+	 		{:
+	  			 RESULT=new blockNode(f,s, l.linenum, l.colnum);
+        	 :}	
+        ;
+         
+exp		::= exp:leftval PLUS:op unit:rightval
+			 {: RESULT=new binaryOpNode(leftval,sym.PLUS,rightval,op.linenum,op.colnum); :}	
+		| exp:leftval MINUS:op unit:rightval
+			 {: RESULT=new binaryOpNode(leftval,sym.MINUS,rightval,op.linenum,op.colnum); :}
+		| unit:leftval EQ:op unit:rightval
+			 {: RESULT=new binaryOpNode(leftval,sym.EQ,rightval,op.linenum,op.colnum); :}	
+		| unit:leftval NOTEQ:op unit:rightval
+			 {: RESULT=new binaryOpNode(leftval,sym.NOTEQ,rightval,op.linenum,op.colnum); :}
+	    
+		|   unit:u
+			{: RESULT = u; :}
+		;
+unit    ::=	
+            LPAREN exp:e RPAREN 
+	   		 {: RESULT = e; :}
+        |  ident:i		
+			 {: RESULT = i; :}
+		 | intliteral:l
+	  		  {: RESULT = l; :}
+		;
+ident		::= IDENTIFIER:i
+			 {: RESULT = new identNode(i.identifierText,
+									   i.linenum,i.colnum); :}	
+		;
+		
+intliteral
+   ::= INTLIT:i
+	 {: RESULT = new intLitNode(i.intValue, i.linenum,i.colnum);
+         :}	
+    ;
+		
+optionalSemi
+   		 ::= SEMI
+   		 |
+   		 ;

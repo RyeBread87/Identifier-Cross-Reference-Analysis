@@ -1,0 +1,17 @@
+// Bigger example of CSXlite program
+{int i;
+ bool b;
+ {int c;
+  c=1;
+  i=c+22;
+  {int j;
+   j=c-1-123; }}
+ if (b) {
+   int k;
+   k = 2010;
+   if (i == 17) {
+    int l;
+    l = k+c;}
+  c=i-10;}
+ i=1+1;
+ }

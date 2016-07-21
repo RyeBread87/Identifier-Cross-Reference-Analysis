@@ -1,0 +1,69 @@
+Buildfile: /Users/charlesfischer/Documents/536 fall 2013/eclipse/cs 536 project 1/build.xml
+JLex:
+    [javac] Compiling 1 source file to /Users/charlesfischer/Documents/536 fall 2013/eclipse/cs 536 project 1/bin
+Cup:
+checkASTNeeded:
+AST:
+compile:
+test:
+     [echo] ------- test using test.lite ----------
+     [echo]  	     
+     [java] CSX Lite program parsed correctly.
+     [java] Here is its unparsing:
+     [java] 2:	 {
+     [java] 2:	   int aa;
+     [java] 3:	   int bb;
+     [java] 4:	   int cc;
+     [java] 5:	   int dd;
+     [java] 6:	   int bbb;
+     [java] 8:	   int ccc;
+     [java] 9:	   aa = (aa + (bb - 18));
+     [java] 10:	   bb = ((aa + bb) - 12);
+     [java] 11:	   if ((((bb + cc) - dd) == 123))
+     [java] 11:	      {
+     [java] 12:	         bool aaa;
+     [java] 13:	         if (aaa)
+     [java] 14:	            ccc = dd;
+     [java] 11:	      }
+     [java] 15:	   aa = ccc;
+     [java] 2:	 } EOF
+     [java] Here is an analysis of identifier declarations and uses for test.lite:
+     [java] Scope 1 (at line 2): 6 declaration(s), 11 identifier use(s)
+     [java] Scope 2 (at line 11): 1 declaration(s), 3 identifier use(s)
+     [echo] ------- test using biggertest.lite ----------
+     [echo]  	 	     
+     [java] CSX Lite program parsed correctly.
+     [java] Here is its unparsing:
+     [java] 2:	 {
+     [java] 2:	   int i;
+     [java] 3:	   bool b;
+     [java] 4:	   {
+     [java] 4:	      int c;
+     [java] 5:	      c = 1;
+     [java] 6:	      i = (c + 22);
+     [java] 7:	      {
+     [java] 7:	         int j;
+     [java] 8:	         j = ((c - 1) - 123);
+     [java] 7:	      }
+     [java] 4:	   }
+     [java] 9:	   if (b)
+     [java] 9:	      {
+     [java] 10:	         int k;
+     [java] 11:	         k = 2010;
+     [java] 12:	         if ((i == 17))
+     [java] 12:	            {
+     [java] 13:	               int l;
+     [java] 14:	               l = (k + c);
+     [java] 12:	            }
+     [java] 15:	         c = (i - 10);
+     [java] 9:	      }
+     [java] 16:	   i = (1 + 1);
+     [java] 2:	 } EOF
+     [java] Here is an analysis of identifier declarations and uses for biggertest.lite:
+     [java] Scope 1 (at line 2): 2 declaration(s), 2 identifier use(s)
+     [java] Scope 2 (at line 4): 1 declaration(s), 3 identifier use(s)
+     [java] Scope 3 (at line 7): 1 declaration(s), 2 identifier use(s)
+     [java] Scope 4 (at line 9): 1 declaration(s), 4 identifier use(s)
+     [java] Scope 5 (at line 12): 1 declaration(s), 3 identifier use(s)
+BUILD SUCCESSFUL
+Total time: 2 seconds

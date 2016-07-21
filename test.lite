@@ -1,0 +1,16 @@
+// This is a simple CSXlite program
+{   int aa;
+    int bb;
+    int cc;
+    int dd;
+    int bbb;
+ 
+    int ccc;
+	aa  = aa+(bb-18);
+	bb = aa+bb-12;
+	if ( (bb+cc-dd) == 123) { 
+	    bool aaa;
+		if ( aaa )
+			ccc=dd; }
+	aa = ccc ; 
+}
